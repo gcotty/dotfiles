@@ -324,6 +324,16 @@ do
     },
   }
 
+  -- [[ Floating Terminal ]]
+  -- Toggle a floating and persistent terminal
+  vim.pack.add { gh 'akinsho/toggleterm.nvim' }
+  require('toggleterm').setup {
+    direction = 'float',
+    float_opts = { border = 'rounded' },
+    start_in_insert = true,
+  }
+  vim.keymap.set('n', '<leader>tt', '<cmd>ToggleTerm<cr>', { desc = '[T]oggle [T]erminal' })
+
   -- [[ Colorscheme ]]
   -- You can easily change to a different colorscheme.
   -- Change the name of the colorscheme plugin below, and then
@@ -699,15 +709,16 @@ do
   --  See `:help lsp-config` for information about keys and how to configure
   ---@type table<string, vim.lsp.Config>
   local servers = {
-    -- Point pyright at project venv via uv so imports resolve
+    -- Point pyright at project venv via uv so imports resolve.
     pyright = {
-      before_init = function(_, config)
-        local root = config.root_dir or vim.fn.getcwd()
+      on_init = function(client)
+        local root = client.config.root_dir or vim.fn.getcwd()
         local venv_python = root .. '/.venv/bin/python'
         if vim.uv.fs_stat(venv_python) then
-          config.settings = vim.tbl_deep_extend('force', config.settings or {}, {
+          client.settings = vim.tbl_deep_extend('force', client.settings or {}, {
             python = { pythonPath = venv_python },
           })
+          client:notify('workspace/didChangeConfiguration', { settings = client.settings })
         end
       end,
     },
