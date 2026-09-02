@@ -696,7 +696,18 @@ do
   --  See `:help lsp-config` for information about keys and how to configure
   ---@type table<string, vim.lsp.Config>
   local servers = {
-    pyright = {},
+    -- Point pyright at project venv via uv so imports resolve
+    pyright = {
+      before_init = function(_, config)
+        local root = config.root_dir or vim.fn.getcwd()
+        local venv_python = root .. '/.venv/bin/python'
+        if vim.uv.fs_stat(venv_python) then
+          config.settings = vim.tbl_deep_extend('force', config.settings or {}, {
+            python = { pythonPath = venv_python },
+          })
+        end
+      end,
+    },
     ruff = {},
     vtsls = {
       settings = {
