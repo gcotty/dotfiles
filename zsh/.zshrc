@@ -79,15 +79,6 @@ fi
 
 alias v='source .venv/bin/activate'
 
-# Must log into az to use this
-kv() {
-  az keyvault secret show \
-    --vault-name <My-Key-Vault> \
-    --name "$1" \
-    --query value \
-    -o tsv
-}
-
 # direnv hook
 command -v direnv >/dev/null 2>&1 && eval "$(direnv hook zsh)"
 
