@@ -7,9 +7,6 @@ export VISUAL=nvim
 # NVM
 export NVM_DIR="$HOME/.nvm"
 
-# Dagster
-export DAGSTER_HOME=~/My_Dagster_Repo/.dagster
-
 # ------------------
 # ------ Path ------
 # ------------------
@@ -19,9 +16,6 @@ if [[ -d /opt/nvim-linux-x86_64/bin ]]; then
 fi
 
 [[ -d "$HOME/.local/bin" ]] && path=("$HOME/.local/bin" $path)
-
-# opencode
-export PATH=$HOME/.opencode/bin:$PATH
 
 typeset -U path PATH
 
@@ -84,7 +78,6 @@ if [[ -x /usr/bin/dircolors ]]; then
 fi
 
 alias v='source .venv/bin/activate'
-alias vp='source .venv-playwright/bin/activate'
 
 # Must log into az to use this
 kv() {
@@ -95,8 +88,8 @@ kv() {
     -o tsv
 }
 
-# SFTPs
-alias sftp-example='sshpass -p "$(kv SFTP-Password)" sftp -P 22 <user@sftp-domain.com>'
-
 # direnv hook
 command -v direnv >/dev/null 2>&1 && eval "$(direnv hook zsh)"
+
+# Private config load
+[[ -f ~/.zshrc.local ]] && source ~/.zshrc.local
