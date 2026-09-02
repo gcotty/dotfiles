@@ -333,6 +333,15 @@ do
     start_in_insert = true,
   }
   vim.keymap.set('n', '<leader>tt', '<cmd>ToggleTerm<cr>', { desc = '[T]oggle [T]erminal' })
+  -- always start the terminal in insert mode
+  vim.api.nvim_create_autocmd({ 'TermOpen', 'BufWinEnter' }, {
+    pattern = 'term://*toggleterm#*',
+    callback = function()
+      vim.schedule(function()
+        if vim.bo.buftype == 'terminal' then vim.cmd.startinsert() end
+      end)
+    end,
+  })
 
   -- [[ Colorscheme ]]
   -- You can easily change to a different colorscheme.

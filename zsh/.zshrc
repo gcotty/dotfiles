@@ -93,3 +93,6 @@ command -v direnv >/dev/null 2>&1 && eval "$(direnv hook zsh)"
 
 # Private config load
 [[ -f ~/.zshrc.local ]] && source ~/.zshrc.local
+
+# Prevent nvim editing from applying to shell prompts
+bindkey -e
