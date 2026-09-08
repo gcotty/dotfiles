@@ -369,6 +369,9 @@ do
     vim.api.nvim_set_hl(0, 'NvimTreeGitFolderDirtyHL', { fg = '#E2C08D' })
     vim.api.nvim_set_hl(0, 'NvimTreeGitFileNewHL', { fg = '#73C991' })
     vim.api.nvim_set_hl(0, 'NvimTreeGitFolderNewHL', { fg = '#73C991' })
+    vim.api.nvim_set_hl(0, 'NvimTreeGitIgnoredIcon', { fg = '#808080' })
+    vim.api.nvim_set_hl(0, 'NvimTreeGitFileIgnoredHL', { fg = '#808080' })
+    vim.api.nvim_set_hl(0, 'NvimTreeGitFolderIgnoredHL', { fg = '#808080' })
   end
 
   set_nvim_tree_git_highlights()
@@ -469,6 +472,7 @@ do
     },
     filters = {
       dotfiles = false,
+      git_ignored = false, -- Show ignored files too, using dimmed git highlights.
     },
   }
 
@@ -517,16 +521,17 @@ do
   vim.pack.add(telescope_plugins)
 
   -- See `:help telescope` and `:help telescope.setup()`
+  local grep_args = vim.list_extend(vim.deepcopy(require('telescope.config').values.vimgrep_arguments), { '--hidden', '--glob', '!.git' })
   require('telescope').setup {
-    -- You can put your default mappings / updates / etc. in here
-    --  All the info you're looking for is in `:help telescope.setup()`
-    --
-    -- defaults = {
-    --   mappings = {
-    --     i = { ['<c-enter>'] = 'to_fuzzy_refine' },
-    --   },
-    -- },
-    -- pickers = {}
+    defaults = {
+      vimgrep_arguments = grep_args,
+    },
+    pickers = {
+      find_files = {
+        -- Include dotfiles, respect ignore rules, and skip Git internals.
+        find_command = { 'rg', '--files', '--hidden', '--glob', '!.git' },
+      },
+    },
     extensions = {
       ['ui-select'] = { require('telescope.themes').get_dropdown() },
     },
