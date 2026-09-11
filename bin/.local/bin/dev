@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+
+# Use current dir as the tmux session name
+SESSION=$(basename "$PWD")
+
+SESSION=${SESSION//./_}
+SESSION=${SESSION//:/_}
+
+if ! tmux has-session -t "$SESSION" 2>/dev/null; then
+  MAIN_PANE=$(tmux new-session \
+    -d \
+    -s \
+    "$SESSION" \
+    -c "$PWD" \
+    -P \
+    -F '#{pane_id}')
+
+  # Full height right pane, 30% width
+  tmux split-window -h -p 30 -c "$PWD" -t "$MAIN_PANE"
+
+  # Bottom left shell, 25% height
+  tmux split-window -v -p 25 -c "$PWD" -t "$MAIN_PANE"
+
+  # Start neovim in upper left
+  tmux send-keys -t "$MAIN_PANE" 'nvim .' Enter
+
+  # Focus neovim
+  tmux select-pane -t "$MAIN_PANE"
+fi
+
+tmux attach-session -t "$SESSION"
