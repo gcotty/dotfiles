@@ -491,6 +491,9 @@ do
     },
   }
 
+  -- Custom tree breadcrumb for nvim-tree
+  require('custom.tree_breadcrumb').setup()
+
   vim.keymap.set('n', '<leader>e', '<cmd>NvimTreeToggle<CR>', { desc = 'Toggle file explorer' })
   vim.keymap.set('n', '<leader>ef', '<cmd>NvimTreeFindFile!<CR>', { desc = '[E]xplorer: find current [F]ile' })
 end
