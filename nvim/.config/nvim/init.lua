@@ -54,6 +54,21 @@ do
       },
       cache_enabled = 0,
     }
+
+  -- Else native Linux via Wayland
+  elseif vim.fn.has 'unix' == 1 and vim.env.WAYLAND_DISPLAY then
+    vim.g.clipboard = {
+      name = 'wl-clipboard',
+      copy = {
+        ['+'] = 'wl-copy',
+        ['*'] = 'wl-copy',
+      },
+      paste = {
+        ['+'] = 'wl-paste --no-newline',
+        ['*'] = 'wl-paste --no-newline',
+      },
+      cache_enabled = 0,
+    }
   end
 
   -- Enable break indent
