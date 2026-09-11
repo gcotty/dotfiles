@@ -31,20 +31,24 @@ git clone git@github.com:gcotty/dotfiles.git
 cd ~/dotfiles
 ```
 
-Back up any existing configs, then create the symlinks:
-
+May need to ensure scripts are executable
 ```
-stow --target="$HOME" nvim zsh tmux
+chmod +x bin/.local/bin/dev
+```
+
+Back up any existing configs, then create the symlinks:
+```
+stow --target="$HOME" nvim zsh tmux bin
 ```
 
 ## Remove symlinks
 
 ```
-stow --delete --target="$HOME" nvim zsh tmux
+stow --delete --target="$HOME" nvim zsh tmux bin
 ```
 
 ## Restow after reorganizing files
 
 ```
-stow --restow --target="$HOME" nvim zsh tmux
+stow --restow --target="$HOME" nvim zsh tmux bin
 ```
