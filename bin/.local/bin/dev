@@ -6,26 +6,21 @@ SESSION=$(basename "$PWD")
 SESSION=${SESSION//./_}
 SESSION=${SESSION//:/_}
 
-if ! tmux has-session -t "$SESSION" 2>/dev/null; then
-  MAIN_PANE=$(tmux new-session \
-    -d \
-    -s \
-    "$SESSION" \
-    -c "$PWD" \
-    -P \
-    -F '#{pane_id}')
+if ! tmux has-session -t "=$SESSION" 2>/dev/null; then
+  TERMINAL_WIDTH=$(tput cols 2>/dev/null || printf '80\n')
+  TERMINAL_HEIGHT=$(tput lines 2>/dev/null || printf '24\n')
 
-  # Full height right pane, 30% width
-  tmux split-window -h -p 30 -c "$PWD" -t "$MAIN_PANE"
+  # The status bar occupies one terminal row
+  WINDOW_HEIGHT=$((TERMINAL_HEIGHT - 1))
 
-  # Bottom left shell, 25% height
-  tmux split-window -v -p 25 -c "$PWD" -t "$MAIN_PANE"
+  # Split main 70:30 with right; 80:20 with bottom
+  MAIN_PANE=$(tmux new-session -d -s "$SESSION" -c "$PWD" -x "$TERMINAL_WIDTH" -y "$WINDOW_HEIGHT" -P -F '#{pane_id}')
+  RIGHT_PANE=$(tmux split-window -h -p 30 -c "$PWD" -t "$MAIN_PANE" -P -F '#{pane_id}')
+  BOTTOM_PANE=$(tmux split-window -v -p 20 -c "$PWD" -t "$MAIN_PANE" -P -F '#{pane_id}')
 
   # Start neovim in upper left
   tmux send-keys -t "$MAIN_PANE" 'nvim .' Enter
-
-  # Focus neovim
   tmux select-pane -t "$MAIN_PANE"
 fi
 
-tmux attach-session -t "$SESSION"
+tmux attach-session -t "=$SESSION"
