@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+if [[ $# -ne 1 || -z "$1" ]]; then
+  printf 'Usage: kv <secret-name>\n' >&2
+  exit 2
+fi
+
+: "${AZURE_KV_NAME:?Set AZURE_KV_NAME in ~/.zshrc.local}"
+
+exec az keyvault secret show \
+  --vault-name "$AZURE_KV_NAME" \
+  --name "$1" \
+  --query value \
+  --output tsv \
+  --only-show-errors

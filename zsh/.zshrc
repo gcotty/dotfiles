@@ -29,6 +29,10 @@ typeset -U path PATH
 [[ -s "$NVM_DIR/bash_completion" ]] &&
   source "$NVM_DIR/bash_completion"
 
+# pnpm
+export PNPM_HOME="${XDG_DATA_HOME:-$HOME/.local/share}/pnpm"
+[[ -d "$PNPM_HOME/bin" ]] && path=("$PNPM_HOME/bin" $path)
+
 # uv
 [[ -r "$HOME/.local/bin/env" ]] &&
   source "$HOME/.local/bin/env"

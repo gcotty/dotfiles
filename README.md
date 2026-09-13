@@ -31,9 +31,9 @@ git clone git@github.com:gcotty/dotfiles.git
 cd ~/dotfiles
 ```
 
-May need to ensure scripts are executable
+May need to ensure scripts are executable:
 ```
-chmod +x bin/.local/bin/dev
+chmod +x bin/.local/bin/dev bin/.local/bin/kv
 ```
 
 Back up any existing configs, then create the symlinks:
