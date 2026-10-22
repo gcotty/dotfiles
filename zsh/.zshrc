@@ -78,6 +78,7 @@ if [[ -x /usr/bin/dircolors ]]; then
   alias fgrep='fgrep --color=auto'
   alias egrep='egrep --color=auto'
   alias gdiff='git diff --compact-summary HEAD^1 HEAD'
+  alias ruffi='uvx ruff check --select I --fix'
 
   zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
 fi
